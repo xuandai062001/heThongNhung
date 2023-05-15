@@ -1,1 +1,386 @@
+Câu 1: KeiC 8 led đơn sáng, tắt 5 hiệu ứng
+ 
+#include<AT89x51.h>
+#define bat 0
+#define tat 1
+sbit led1 = P2^0;
+sbit led2 = P2^1;
+sbit led3 = P2^2;
+sbit led4 = P2^3;
+sbit led5 = P2^4;
+sbit led6 = P2^5;
+sbit led7 = P2^6;
+sbit led8 = P2^7;
 
+void delay(long time){
+	while(time--);
+}
+ void setup(){
+	 led1=tat;
+	 led2=tat;
+	 led3=tat;
+	 led4=tat;
+	 led5=tat;
+	 led6=tat;
+	 led7=tat;
+	 led8=tat;
+ }
+ void traisangphai(){
+	 setup();
+	delay(2000);
+	 led1=bat;
+	 delay(2000);
+	  led2=bat;
+	 delay(2000);
+	  led3=bat;
+	 delay(2000);
+	  led4=bat;
+	delay(2000);
+	  led5=bat;
+	 delay(2000);
+	  led6=bat;
+	delay(2000);
+	  led7=bat;
+	 delay(2000);
+	  led8=bat;
+	delay(2000);
+ }
+  void phaisangtrai(){
+	 setup();
+	delay(2000);
+	 led8=bat;
+	 delay(2000);
+	  led7=bat;
+	 delay(2000);
+	  led6=bat;
+	 delay(2000);
+	  led5=bat;
+	delay(2000);
+	  led4=bat;
+	 delay(2000);
+	  led3=bat;
+	delay(2000);
+	  led2=bat;
+	 delay(2000);
+	  led1=bat;
+	delay(2000);
+ }
+ void giuasang2ben(){
+	 setup();
+	 delay(2000);
+	 led5=bat;
+	 led4=bat;
+	 delay(2000);
+	 led3=bat;
+	 led6=bat;
+	 delay(2000);
+	 led2=bat;
+	 led7=bat;
+	 delay(2000);
+	 led1=bat;
+	 led8=bat;
+	 delay(2000);
+}
+ void haibenvaogiua(){
+	setup();
+	 delay(2000);
+	 led1=bat;
+	 led8=bat;
+	 delay(2000);
+	 led2=bat;
+	 led7=bat;
+	 delay(2000);
+	 led3=bat;
+	 led6=bat;
+	 delay(2000);
+	 led4=bat;
+	 led5=bat;
+ 
+	 delay(2000); 
+}
+ void lesang(){
+	 setup();
+	 delay(2000);
+	 led1=bat;
+	 delay(2000);
+	 led3=bat;
+	 delay(2000);
+	 led5=bat;
+	 delay(2000);
+	 led7=bat;
+	 delay(2000);
+ }
+ 
+ void main(){
+ 
+	 while(1){
+		 setup();
+		 delay(2000);
+		 traisangphai();
+		 delay(10000);
+		 phaisangtrai();
+		 delay(10000);
+		 giuasang2ben();
+		 delay(10000);
+		 haibenvaogiua();
+		 delay(10000);
+		 lesang();
+		 delay(10000);
+	 }
+ }
+Câu 2: Keil C từ 00 đến 99
+#include<AT89x51.H>
+char so[]={0x40,0x79,0x24,0x30,0x19,
+0x12,0x02,0x78,0x00,0x10}; //mang so
+int dem=0;
+unsigned char chuc, donvi;
+#define led1 P2_0
+#define led2 P2_1
+#define sang 0
+#define tat 1
+char i;
+ void delay(int time){
+	 while(time--);
+ }
+ void setup(){
+	 led1=tat;
+	 led2=tat;
+ }
+void display(){
+	for(dem=0; dem<=99; dem++){
+		chuc= dem/10;
+		donvi= dem%10;
+		for(i=0; i<9; i++){
+			led1=sang;
+			P0=so[chuc];
+			delay(1000);
+			led1=tat;
+			
+			led2=sang;
+			P0=so[donvi];
+			delay(1000);
+			led2=tat;
+		}
+	}
+}
+void main(){
+	setup();
+	delay(1000);
+	while(1){
+		display();
+	}
+}
+Câu 3: KEYPAD-SMALLCALC Thực hiện tính toán 
+#include <Keypad.h>
+#include <LiquidCrystal.h>
+const int rs = 12, en = 11, d4 = 5, d5 = 4, d6 = 3, d7 = 2;
+LiquidCrystal lcd(rs, en, d4, d5, d6, d7);
+char op = ' '; //luu dau
+long num1 = 0; // bien 1
+long num2 = 0; //bien 2
+long result = 0;  //ket qua
+char key = ' ';
+String pheptoan = " ";
+const byte rows = 4; 
+const byte cols = 4; 
+char keys[rows][cols] =
+{
+  {'7','8','9','/'},
+  {'4','5','6','*'},
+  {'1','2','3','-'},
+  {'C','0','=','+'}
+};
+int c1=10;
+int c2=9;
+int c3=8;
+int c4=7;
+byte rowPins[rows] = {A0, A1, A2, A3};
+byte colPins[cols] = {c1, c2, c3, c4};
+Keypad keypad = Keypad( makeKeymap(keys), rowPins, colPins, rows, cols);
+
+void setup () {
+      lcd.begin(16, 2);
+      lcd.print("Enter Number:");
+      delay(300);
+      lcd.clear();
+}
+void loop() {
+  key = keypad.getKey(); // Đọc giá trị từ bàn phím (nếu có)
+  if (key != NO_KEY) { // Nếu có nhấn phím
+    if (key >= '0' && key <= '9') { // nếu nhấn phim so
+      if (op == ' ') { // Nếu chưa có toán tử thì nhập số thứ nhất
+        num1 = (num1 * 10) + (key - '0'); // Cập nhật số thứ nhất
+      } else { // Nếu đã có toán tử thì nhập số thứ hai
+        num2 = (num2 * 10) + (key - '0'); // Cập nhật số thứ hai
+      }
+    }
+    else if(key == '+' || key == '-' || key == '*' || key == '/'){
+      op = key;
+    }
+    else if(key == 'C'){
+      num1=0;
+      num2=0;
+      op=' ';
+      result = 0;
+      lcd.clear();
+    }
+    else if(key == '=') {
+      
+      if(op == '+'){
+        result = num1 + num2;
+      }
+      if(op == '-'){
+        result = num1 - num2;
+      }
+      if(op == '*'){
+        result = num1 * num2;
+      }
+      if(op == '/'){
+        result = num1 / num2;
+      }
+      lcd.setCursor(0, 1);
+      lcd.print("= ");
+      lcd.setCursor(3, 1);
+      lcd.print(result);
+    }
+    lcd.setCursor(0, 0);
+    lcd.print(num1);
+    lcd.setCursor(7, 0);
+    lcd.print(op);
+    lcd.setCursor(8, 0);
+    lcd.print(num2);
+  }
+}
+
+ 
+Câu 4: 2 Servo ngược chiều nhau
+#include <Servo.h>
+Servo servo1; 
+Servo servo2;
+int potpin = A0;  
+int val;    
+
+void setup() {
+  servo1.attach(9);  
+  servo2.attach(3);
+}
+
+void loop() {
+   val = analogRead(potpin); 
+   val = map(val, 0, 1023, 0, 180);
+   servo1.write(val);
+   servo2.write(180 -val);
+  delay(1500);                           
+}
+
+ 
+Câu 5: Đo nhiệt độ trên 30 độ C “NHIET DO CAO”
+#include <LiquidCrystal.h>
+#include "DHT.h"
+#define DHTPin 4 
+#define DHTType DHT11     
+const int rs = 13, e = 12, d4 = 11, d5 = 10, d6 = 9, d7 = 8;
+LiquidCrystal lcd(rs, e, d4, d5, d6, d7);
+DHT dht (DHTPin, DHTType;
+void setup() {
+  lcd.begin(16, 2);
+  dht.begin();  // Khởi động cảm biến
+}
+void display(){
+  float humi = dht.readHumidity();  //doc gia tri do ẩm từ cảm biến
+  float tempC = dht.readTemperature(); // doc giá trị nhiệt độ
+  lcd.clear();     // xóa màn hình LCD
+  // kiểm tra xem lỗi đọc ko
+  if(isnan(humi) || isnan(tempC)){
+     lcd.setCursor(0, 0);
+     lcd.print("Loi doc");
+  }
+  else{
+     lcd.setCursor(0, 0);   
+     lcd.print("NHIET DO:"); 
+     lcd.print(tempC); // in ra nhiet do
+     lcd.print((char)223); // in ra ky tu do
+     lcd.print("C");
+     if(tempC>30){
+      lcd.setCursor(0, 1);
+      lcd.print("NHIET DO CAO");
+     }
+     else{
+     lcd.setCursor(0, 1);     
+     lcd.print("DO AM : "); 
+     lcd.print(humi);      //hien thi do am
+     lcd.print("%");
+     }
+   } }
+void loop() {
+  delay(2000);
+  display();
+}
+Câu 6:  Đo nhiệt độ trên 35 độ C “HOT TEMP”.
+#include <LiquidCrystal.h>
+#define ACD_mV 5000.0  
+// Điện áp tham chiếu của ADC là 5V
+#define ACD_PG 1024.0  
+// Độ phân giải của ADC là 10 bit
+#define pinLM35 A0    //LM35 ở chân A0
+const int rs = 12, en = 11, d4 = 5, d5 = 4, d6 = 3, d7 = 2;
+LiquidCrystal lcd(rs, en, d4, d5, d6, d7);
+
+void setup() {
+  lcd.begin(16, 2);
+}
+void display(){
+  int acdVal= analogRead(pinLM35);    
+// Đọc giá trị ADC từ cảm biến LM35
+  float miliVolt= acdVal * (ACD_mV / ACD_PG);
+  float tempC=miliVolt/10;
+
+  lcd.setCursor(0,0);
+  lcd.print("NHIET DO:");
+  lcd.print(tempC);
+  lcd.print((char)223);
+  lcd.print("C");
+
+  if(tempC>35){
+    lcd.setCursor(0,1);
+    lcd.print("HOT TEMP");
+  }
+  else{
+     lcd.setCursor(0,1);
+     lcd.print("        ");
+  }
+}
+void loop() {
+  display();
+}
+ 
+Câu 7: Cảm biến lửa
+//Khai bao ket noi
+int red=3;
+int green=4;
+int speaker=11;
+int flame=12;
+
+void setup()
+{
+  pinMode(red,OUTPUT);
+  pinMode(green,OUTPUT);
+  pinMode(speaker,OUTPUT);
+  pinMode(flame,INPUT);
+  Serial.begin(9600);
+}
+
+void loop() {
+  int valflame = digitalRead(flame);
+  Serial.println(valflame);
+ if(valflame==LOW){
+  digitalWrite(red,LOW);
+  digitalWrite(green,HIGH);
+  digitalWrite(speaker,LOW);
+ }
+ else{
+  digitalWrite(red,HIGH);
+  digitalWrite(green,LOW);
+  digitalWrite(speaker,HIGH);
+ }
+}
