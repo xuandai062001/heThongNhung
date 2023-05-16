@@ -1,3 +1,5 @@
+C:\Program Files (x86)\Labcenter Electronics\Proteus 8 Professional\DATA\LIBRARY\FlameSensorTEP.HEX
+
 Câu 1: KeiC 8 led đơn sáng, tắt 5 hiệu ứng
  
 #include<AT89x51.h>
